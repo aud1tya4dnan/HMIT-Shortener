@@ -39,11 +39,12 @@ export default {
     return {
       longurl: "",
       shorturl: "",
+      validation: "",
     };
   },
   methods: {
     async postLink() {
-        let uid = localStorage.getItem('uid');
+      let uid = localStorage.getItem('uid');
       console.log(this.longurl);
       const send = await axios
         .post(api + "login", {
@@ -54,6 +55,9 @@ export default {
         })
         .then((response) => {
           // console.log(response);
+          if (response.status == 400) {
+            this.validation = response;
+          }
           this.$router.push("/links");
         })
         .catch((error) => {

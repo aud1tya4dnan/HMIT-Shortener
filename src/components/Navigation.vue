@@ -74,7 +74,7 @@
             </a>
             <a v-if="isLoggedIn"
               class="block rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-white transition hover:text-white dark:bg-red-800 dark:hover:bg-red-700"
-              href="/login">
+              @click="logout()">
               Logout
             </a>
           </div>
@@ -89,6 +89,10 @@
             </svg>
           </button> -->
 
+          <aside>
+            
+          </aside>
+
         </div>
       </div>
     </div>
@@ -96,8 +100,8 @@
 </template>
 
 <script>
-import api from "../api/url.js";
-import axios from 'axios';
+// import api from "../api/url.js";
+// import axios from 'axios';
 
 export default {
   data() {
@@ -116,36 +120,32 @@ export default {
       localStorage.clear();
       sessionStorage.clear();
     },
+
     async checkLoginStatus() {
-      // Implementasi pemeriksaan status login
-      // const user = axios.get( api + "getuser", {
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': 'Bearer ' + localStorage.getItem("uid")
-      //   }
-      // })
       let uid = localStorage.getItem("uid");
-      if (uid) {
+      if (uid !== null || uid !== "" || uid !== "auth/netowork-error") {
         return true;
       }
       return false; // atau false, tergantung status pengguna
     },
+
     async checkTime() {
       let expired = localStorage.getItem("expired");
+      
       if (expired < Date.now()) {
         this.logout();
       }
     }
+
   },
   mounted() {
-    // Contoh sederhana untuk mengecek status login
     this.isLoggedIn = this.checkLoginStatus();
     if (this.isLoggedIn === true) {
       this.showLoginButton = false;
+      setInterval(this.checkTime, 1000);
+    } else {
+      this.logout();
     }
-    setTimeout(() => {
-      this.checkTime();
-    }, 1000);
   },
 };
 </script>
