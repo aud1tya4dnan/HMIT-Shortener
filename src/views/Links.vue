@@ -8,8 +8,8 @@
             <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm dark:divide-gray-700 dark:bg-gray-900">
                 <thead class="ltr:text-left rtl:text-right">
                     <tr>
-                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 dark:text-white">Shortlink</th>
-                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 dark:text-white">
+                        <th class="whitespace-nowrap px-3 py-2 font-medium text-gray-900 dark:text-white">Shortlink</th>
+                        <th class="whitespace-nowrap px-2 py-2 font-medium text-gray-900 dark:text-white">
                             Redirects To
                         </th>
                         <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 dark:text-white">Edit</th>
@@ -21,12 +21,12 @@
 
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700" v-for="link in links" :key="link">
                     <tr>
-                        <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 dark:text-white" :href="'https://s.hmit.store/' + link.slink" >
-                            {{ link.slink }}
+                        <td class="whitespace-nowrap px-4 py-2 font-medium"  >
+                            <a :href="'http://localhost:5173/' + link.slink">{{ link.slink }}</a>
                         </td>
-                        <td class="whitespace-nowrap px-4 py-2 text-gray-700 dark:text-gray-200">{{ link.flink }}</td>
-                        <td class="whitespace-nowrap px-4 py-2 text-gray-700 dark:text-gray-200">Web Developer</td>
-                        <td class="whitespace-nowrap px-4 py-2 text-gray-700 dark:text-gray-200">$120,000</td>
+                        <td class="whitespace-nowrap px-4 py-2 "><a :href="link.flink">Open the Link</a></td>
+                        <td class="whitespace-nowrap px-4 py-2 "><button>Edit</button></td>
+                        <td class="whitespace-nowrap px-4 py-2 "><button>Delete</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -46,6 +46,7 @@ export default {
             flink: "",
             slink: "",
             userID: "",
+            search: "",
             newLink: [
                 {
                     id: "",
@@ -59,17 +60,30 @@ export default {
     },
     methods: {
         async getLink() {
-            this.userID = localStorage.getItem('uid');
-            const res = await axios
-                .get( api + "links/", {
-                    uid: this.userID
-                })
-                .then((res) => {
-                    this.links = res.data;
-                })
+            this.userID = sessionStorage.getItem('uid');
+            try {
+                const res = await axios
+                    .get( api + "link/" + this.userID)
+                    .then((res) => {
+                        this.links = res.data;
+                    })
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async search() {
+            try {
+                const res = await axios
+                    .get( api + "search/" + this.search)
+                    .then((res) => {
+                        this.links = res.data;
+                    })
+            } catch (error) {
+                console.log(error);
+            }
         }
     },
-    created(){
+    mounted(){
         this.getLink();
     }
 }

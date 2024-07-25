@@ -122,30 +122,18 @@ export default {
     },
 
     async checkLoginStatus() {
-      let uid = localStorage.getItem("uid");
+      let uid = sessionStorage.getItem("uid");
       if (uid !== null || uid !== "" || uid !== "auth/netowork-error") {
         return true;
       }
       return false; // atau false, tergantung status pengguna
     },
-
-    async checkTime() {
-      let expired = localStorage.getItem("expired");
-      
-      if (expired < Date.now()) {
-        this.logout();
-      }
-    }
-
   },
   mounted() {
-    this.isLoggedIn = this.checkLoginStatus();
-    if (this.isLoggedIn === true) {
-      this.showLoginButton = false;
-      setInterval(this.checkTime, 1000);
-    } else {
-      this.logout();
-    }
+    // if (this.checkLoginStatus === true) {
+    //   this.isLoggedIn = true;
+    //   this.showLoginButton = false;
+    // }
   },
 };
 </script>

@@ -161,8 +161,8 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          localStorage.setItem("uid", response.data);
-          localStorage.setItem("expires_at", Date.now() + 18000);
+          sessionStorage.setItem("uid", response.data);
+          // sessionStorage.setItem("expires_at", Date.now() + 18000);
           this.$router.push("/");
         })
     },
